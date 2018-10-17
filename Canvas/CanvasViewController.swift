@@ -59,13 +59,14 @@ class CanvasViewController: UIViewController {
         let translation = sender.translation(in: view)
         
         if sender.state == .began{
-            var imageView = sender.view as! UIImageView
+            let imageView = sender.view as! UIImageView
             newlyCreatedFace = UIImageView(image: imageView.image)
             view.addSubview(newlyCreatedFace)
             newlyCreatedFace.center = imageView.center
             newlyCreatedFace.center.y += trayView.frame.origin.y
             newlyCreatedFaceOriginalCenter = newlyCreatedFace.center
             
+            newlyCreatedFace.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
             let gesture = UIPanGestureRecognizer(target: self, action: #selector(didPanImageView))
             newlyCreatedFace.isUserInteractionEnabled = true
             newlyCreatedFace.addGestureRecognizer(gesture)
@@ -73,7 +74,7 @@ class CanvasViewController: UIViewController {
         }else if sender.state == .changed{
             newlyCreatedFace.center = CGPoint(x: newlyCreatedFaceOriginalCenter.x + translation.x, y: newlyCreatedFaceOriginalCenter.y + translation.y)
         }else if sender.state == .ended{
-            
+            newlyCreatedFace.transform = newlyCreatedFace.transform.scaledBy(x: 0.75, y: 0.75)
         }
     }
     
@@ -81,12 +82,13 @@ class CanvasViewController: UIViewController {
         let translation = sender.translation(in: view)
         
         if sender.state == .began{
-            newlyCreatedFace = sender.view as! UIImageView // to get the face that we panned on.
+            newlyCreatedFace = sender.view as? UIImageView // to get the face that we panned on.
             newlyCreatedFaceOriginalCenter = newlyCreatedFace.center // so we can offset by translation later.
+            newlyCreatedFace.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         }else if sender.state == .changed{
             newlyCreatedFace.center = CGPoint(x: newlyCreatedFaceOriginalCenter.x + translation.x, y: newlyCreatedFaceOriginalCenter.y + translation.y)
         }else if sender.state == .ended{
-            
+            newlyCreatedFace.transform = newlyCreatedFace.transform.scaledBy(x: 0.75, y: 0.75)
         }
     }
 }
